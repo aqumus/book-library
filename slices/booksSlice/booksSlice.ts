@@ -8,25 +8,38 @@ export type Book = {
   readonly id: string;
 };
 
-export type BooksState = Array<Book>;
+type _BooksState = Array<Book>;
+
+export type BooksState = ReadonlyArray<Book>;
 
 const randomIdGenerator = () =>
   '' + parseInt(`${Math.floor(Math.random() * Math.pow(10, 12))}`, 20);
 
+const books = new Array(5).fill(0).map((_, i) => ({
+  name: `Book ${i}`,
+  description:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci sapien, porta at ipsum ut, eleifend ultrices massa. Donec felis purus, egestas et erat nec, interdum auctor ipsum.',
+  count: Math.round(Math.random() * 10),
+  author: 'John Doe',
+  id: randomIdGenerator(),
+}));
+
+const INITIAL_BOOKS_STATE: ReadonlyArray<Book> = [];
+
 const booksSlice = createSlice({
   name: 'books',
-  initialState: [],
+  initialState: books,
   reducers: {
-    addBooks(state: BooksState, action: PayloadAction<BooksState>) {
+    addBooks(state: _BooksState, action: PayloadAction<_BooksState>) {
       state = [...state, ...action.payload];
     },
-    addBookDetails(state: BooksState, action: PayloadAction<Omit<Book, 'id'>>) {
+    addBook(state: _BooksState, action: PayloadAction<Omit<Book, 'id'>>) {
       state.unshift({
         ...action.payload,
         id: randomIdGenerator(),
       });
     },
-    editBookDetails(state: BooksState, action: PayloadAction<Book>) {
+    updateBookDetails(state: _BooksState, action: PayloadAction<Book>) {
       const bookIndex = state.findIndex(
         (book) => book.id === action.payload.id
       );
@@ -38,6 +51,6 @@ const booksSlice = createSlice({
   },
 });
 
-export const { addBooks, addBookDetails, editBookDetails } = booksSlice.actions;
+export const { addBooks, addBook, updateBookDetails } = booksSlice.actions;
 
 export const booksReducer = booksSlice.reducer;

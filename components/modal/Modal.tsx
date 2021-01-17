@@ -24,7 +24,7 @@ export function Modal({
   open,
   onClose,
   onConfirm,
-  closeLabel = 'Close',
+  closeLabel = 'Cancel',
   confirmLabel = 'Submit',
   modalHeader,
   children,
@@ -44,8 +44,8 @@ export function Modal({
         {modalHeader && <header css={modalHeaderStyle}>{modalHeader}</header>}
         <article css={modalBody}>{children}</article>
         <footer css={modalFooter}>
-          <button onClick={onClose}>{confirmLabel}</button>
-          <button onClick={onConfirm}>{closeLabel}</button>
+          <button onClick={onConfirm}>{confirmLabel}</button>
+          <button onClick={onClose}>{closeLabel}</button>
         </footer>
       </div>
     </div>,

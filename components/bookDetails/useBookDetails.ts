@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import { BookDetailsType } from '../bookDetails';
+import { useCallback, useState, useEffect } from 'react';
+import { BookDetailsType } from '.';
 
 export const useBookDetails = (initialBookDetails: BookDetailsType) => {
   const [bookDetails, setBookDetails] = useState<BookDetailsType>(
@@ -14,8 +14,10 @@ export const useBookDetails = (initialBookDetails: BookDetailsType) => {
     },
     [bookDetails]
   );
+
   return {
     bookDetails,
     onBookDetailsChange,
+    setBookDetails,
   };
 };

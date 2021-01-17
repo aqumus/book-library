@@ -5,7 +5,7 @@ import { bookLibraryContainer } from './BookLibrary.style';
 import { BookList } from '../bookList';
 import { Header } from '../header';
 import { MODAL_CONTAINER_ID } from '../modal';
-import { bookLibraryStore } from './store';
+import { bookLibraryStore } from '../../slices/store';
 
 export function BookLibrary() {
   return (

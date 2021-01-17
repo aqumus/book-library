@@ -1,20 +1,29 @@
+import { useSelector } from 'react-redux';
+import { BookLibraryState, BooksState } from '../../slices';
 import { BookListItem } from '../bookListItem';
-import { bookListContainer } from './BookList.style';
+import { bookListContainer, noBooksMsg } from './BookList.style';
 
-const books = new Array(5).fill(0).map((_, i) => ({
-  name: `Book ${i}`,
-  description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce orci sapien, porta at ipsum ut, eleifend ultrices massa. Donec felis purus, egestas et erat nec, interdum auctor ipsum.',
-  count: Math.round(Math.random() * 10),
-  author: 'John Doe',
-}));
+const searchBooksByTitle = (title: string, books: BooksState) =>
+  title ? books.filter(({ name }) => name.includes(title)) : books;
 
 export function BookList() {
-  return (
-    <div css={bookListContainer}>
-      {books.map((bookDetails, i) => (
-        <BookListItem key={i} {...bookDetails} />
-      ))}
-    </div>
+  const books = useSelector((state: BookLibraryState) => state.books);
+  const searchTitle = useSelector(
+    (state: BookLibraryState) => state.searchBooks.searchByTitle
   );
+  const renderdBooks = searchBooksByTitle(
+    searchTitle,
+    books
+  ).map((bookDetails, i) => (
+    <BookListItem key={bookDetails.id} {...bookDetails} />
+  ));
+
+  const hasBooks = !!renderdBooks.length;
+  const emptyBooks = <h3 css={noBooksMsg}>No Books Found</h3>;
+
+  if (!hasBooks) {
+    return emptyBooks;
+  }
+
+  return <div css={bookListContainer}>{renderdBooks}</div>;
 }

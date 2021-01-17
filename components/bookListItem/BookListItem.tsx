@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import { useDispatch } from 'react-redux';
+import { Book, updateBookDetails } from '../../slices';
 import { BookDetails } from '../bookDetails';
-import { BookDetailsType } from '../bookDetails/BookDetailsType';
+import { BookDetailsType, useBookDetails } from '../bookDetails';
 import { Modal } from '../modal';
 import {
   bookListItemContainer,
@@ -13,14 +15,19 @@ import {
   editButtonStyle,
   listItemFooterContainer,
 } from './BookListItem.style';
-import { useBookDetails } from './useBookDetails';
 
-type BookListItemProps = BookDetailsType;
+type BookListItemProps = Book;
 
-export function BookListItem(props: BookListItemProps) {
-  const { name, description, count, author } = props;
+export const BookListItem = memo((props: BookListItemProps) => {
+  const { name, description, count, author, id } = props;
+  const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { bookDetails, onBookDetailsChange } = useBookDetails(props);
+
+  const onConfirm = () => {
+    dispatch(updateBookDetails({ ...bookDetails, id }));
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -42,12 +49,15 @@ export function BookListItem(props: BookListItemProps) {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={() => setModalOpen(false)}
-        confirmLabel="Save"
+        onConfirm={onConfirm}
+        confirmLabel="Update"
         modalHeader="Update book details"
       >
-        <BookDetails {...props} onBookDetailsChange={onBookDetailsChange} />
+        <BookDetails
+          {...bookDetails}
+          onBookDetailsChange={onBookDetailsChange}
+        />
       </Modal>
     </>
   );
-}
+});
