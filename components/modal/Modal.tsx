@@ -1,19 +1,54 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { modalContainer } from './Modal.style';
+import { Close } from '../../icons';
+import {
+  modal,
+  modalBody,
+  modalContainer,
+  modalFooter,
+  modalHeaderStyle,
+} from './Modal.style';
 
-const MODAL_CONTAINER_ID = 'modal-container';
+export const MODAL_CONTAINER_ID = 'modal-container';
 
 type ModalProps = {
   readonly open: boolean;
   readonly onClose?: () => void;
+  readonly onConfirm?: () => void;
+  readonly closeLabel?: string;
+  readonly confirmLabel: string;
+  readonly modalHeader?: string;
 };
 
-export function Modal(props: PropsWithChildren<ModalProps>) {
-  const ref = useRef(document.getElementById(MODAL_CONTAINER_ID));
-  return (
-    ref.current &&
-    open &&
-    createPortal(<div css={modalContainer}>{props.children}</div>, ref.current)
+export function Modal({
+  open,
+  onClose,
+  onConfirm,
+  closeLabel = 'Close',
+  confirmLabel = 'Submit',
+  modalHeader,
+  children,
+}: PropsWithChildren<ModalProps>) {
+  const ref = useRef<null | HTMLElement>(null);
+  useEffect(() => {
+    ref.current = document.getElementById(MODAL_CONTAINER_ID);
+  }, []);
+
+  if (!ref.current || !open) {
+    return null;
+  }
+
+  return createPortal(
+    <div css={modalContainer}>
+      <div css={modal}>
+        {modalHeader && <header css={modalHeaderStyle}>{modalHeader}</header>}
+        <article css={modalBody}>{children}</article>
+        <footer css={modalFooter}>
+          <button onClick={onClose}>{confirmLabel}</button>
+          <button onClick={onConfirm}>{closeLabel}</button>
+        </footer>
+      </div>
+    </div>,
+    ref.current
   );
 }

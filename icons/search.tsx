@@ -4,7 +4,7 @@ export function Search(props: React.SVGAttributes<SVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 512 512"
+      viewBox="0 0 426.667 426.667"
       width="20px"
       height={'20px'}
       {...props}

@@ -1,4 +1,5 @@
 import { BookListItem } from '../bookListItem';
+import { bookListContainer } from './BookList.style';
 
 const books = new Array(5).fill(0).map((_, i) => ({
   name: `Book ${i}`,
@@ -10,7 +11,7 @@ const books = new Array(5).fill(0).map((_, i) => ({
 
 export function BookList() {
   return (
-    <div>
+    <div css={bookListContainer}>
       {books.map((bookDetails, i) => (
         <BookListItem key={i} {...bookDetails} />
       ))}
