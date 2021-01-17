@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Search } from '../../icons';
-import { searchByTitle } from '../../slices';
+import { BookLibraryState, searchByTitle } from '../../slices';
 import { input, inputContainer, searchIcon } from './SearchInput.style';
 
 const debounce = function (
@@ -20,6 +20,8 @@ const debounce = function (
 export const SearchInput = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
+  const books = useSelector((state: BookLibraryState) => state.books);
+  const bookNames = books.map(({ name }) => name);
   const debouncedDispatch = useMemo(() => debounce(dispatch), [dispatch]);
 
   useEffect(() => {
@@ -35,12 +37,10 @@ export const SearchInput = () => {
         id="search-input"
         onChange={(e) => setValue(e.target.value)}
       />
-      <datalist id="browsers">
-        <option value="Book 1" />
-        <option value="Book 2" />
-        <option value="Book 3" />
-        <option value="Book 4" />
-        <option value="Book 5" />
+      <datalist id="search-input">
+        {bookNames.map((name, i) => (
+          <option value={name} key={i} />
+        ))}
       </datalist>
       <Search css={searchIcon} />
     </div>

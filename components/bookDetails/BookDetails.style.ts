@@ -20,6 +20,12 @@ export const formFieldContainer = css`
     font-size: 1rem;
     padding: 0.35rem 0.5rem;
   }
+  #bookDescription {
+    width: 60%;
+  }
+  #bookCount {
+    width: 15%;
+  }
 `;
 
 export const formStyle = css`

@@ -35,6 +35,8 @@ export const bookDescription = css`
   align-items: center;
   font-size: 0.9rem;
   text-overflow: ellipsis;
+  white-space: break-spaces;
+  overflow: auto;
 `;
 
 export const separator = css`

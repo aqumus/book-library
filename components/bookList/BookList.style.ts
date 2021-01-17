@@ -7,6 +7,10 @@ export const bookListContainer = css`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   height: 80vh;
   overflow-y: auto;
+
+  @media only screen and (max-width: 350px) {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
 `;
 
 export const noBooksMsg = css`

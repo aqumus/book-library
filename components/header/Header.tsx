@@ -1,13 +1,15 @@
 import { AddBook } from '../addBook';
 import { SearchInput } from '../searchInput';
-import { headerStyle, headerTitle } from './Header.style';
+import { headerActions, headerStyle, headerTitle } from './Header.style';
 
 export function Header() {
   return (
     <header css={headerStyle}>
       <h1 css={headerTitle}>Book Library</h1>
-      <AddBook />
-      <SearchInput />
+      <div css={headerActions}>
+        <AddBook />
+        <SearchInput />
+      </div>
     </header>
   );
 }

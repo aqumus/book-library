@@ -10,14 +10,15 @@ export const input = css`
   border: none;
   outline: none;
   font-size: 1rem;
-  width: 16rem;
+  max-width: 15rem;
   padding-left: 10px;
 `;
 
 export const searchIcon = css`
   height: auto;
-  padding: 10px;
+  padding: 3px;
   background: ${PaletteColor.secondary3};
   fill: ${PaletteColor.primary};
   cursor: pointer;
+  width: 24px;
 `;
