@@ -1,8 +1,9 @@
 import { useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
-import { Book, updateBookDetails } from '../../slices';
+import { updateBookDetails } from '../../slices';
+import { Book } from '../../types';
 import { BookDetails } from '../bookDetails';
-import { BookDetailsType, useBookDetails } from '../bookDetails';
+import { useBookDetails } from '../bookDetails';
 import { Modal } from '../modal';
 import {
   bookListItemContainer,
@@ -22,11 +23,21 @@ export const BookListItem = memo((props: BookListItemProps) => {
   const { name, description, count, author, id } = props;
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
-  const { bookDetails, onBookDetailsChange } = useBookDetails(props);
+  const [inProgress, setInprogress] = useState(false);
+  const { bookDetails, onBookDetailsChange, setBookDetails } = useBookDetails(
+    props
+  );
 
-  const onConfirm = () => {
-    dispatch(updateBookDetails({ ...bookDetails, id }));
-    setModalOpen(false);
+  const onConfirm = async () => {
+    setInprogress(true);
+    const updatedBookDetails = { ...bookDetails, id };
+    const { data } = await updateBookApi(updatedBookDetails);
+    if (data) {
+      dispatch(updateBookDetails(data));
+      setInprogress(false);
+      setModalOpen(false);
+      setBookDetails(data);
+    }
   };
 
   return (
@@ -50,8 +61,9 @@ export const BookListItem = memo((props: BookListItemProps) => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={onConfirm}
-        confirmLabel="Update"
+        confirmLabel={inProgress ? 'Updating' : 'Update'}
         modalHeader="Update book details"
+        inProgress={inProgress}
       >
         <BookDetails
           {...bookDetails}
@@ -61,3 +73,25 @@ export const BookListItem = memo((props: BookListItemProps) => {
     </>
   );
 });
+
+async function updateBookApi(
+  bookDetails: Book
+): Promise<{
+  data?: Book;
+  error?: Error;
+}> {
+  try {
+    const res: Response = await fetch('api/updateBook', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookDetails),
+    });
+    return { data: (await res.json()) as Book };
+  } catch (e) {
+    const error = Error('Error while adding book');
+    console.error(error.message, e);
+    return { data: undefined, error };
+  }
+}

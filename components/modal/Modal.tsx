@@ -18,6 +18,7 @@ type ModalProps = {
   readonly closeLabel?: string;
   readonly confirmLabel: string;
   readonly modalHeader?: string;
+  readonly inProgress?: boolean;
 };
 
 export function Modal({
@@ -27,6 +28,7 @@ export function Modal({
   closeLabel = 'Cancel',
   confirmLabel = 'Submit',
   modalHeader,
+  inProgress,
   children,
 }: PropsWithChildren<ModalProps>) {
   const ref = useRef<null | HTMLElement>(null);
@@ -44,8 +46,12 @@ export function Modal({
         {modalHeader && <header css={modalHeaderStyle}>{modalHeader}</header>}
         <article css={modalBody}>{children}</article>
         <footer css={modalFooter}>
-          <button onClick={onConfirm}>{confirmLabel}</button>
-          <button onClick={onClose}>{closeLabel}</button>
+          <button onClick={onConfirm} disabled={inProgress}>
+            {confirmLabel}
+          </button>
+          <button onClick={onClose} disabled={inProgress}>
+            {closeLabel}
+          </button>
         </footer>
       </div>
     </div>,
