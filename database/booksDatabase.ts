@@ -39,7 +39,7 @@ export async function addBook(newBook: Book) {
 }
 
 export async function getBooks() {
-  return _BOOKS;
+  return [..._BOOKS];
 }
 
 async function writeToBookJson() {

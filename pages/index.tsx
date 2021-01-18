@@ -19,7 +19,7 @@ export async function getStaticProps() {
     },
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
-    // - At most once 10 second
-    revalidate: 1, // In seconds
+    // - At most once 5 second
+    revalidate: 5, // In seconds
   };
 }
