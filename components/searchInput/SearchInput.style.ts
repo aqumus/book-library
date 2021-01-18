@@ -20,5 +20,5 @@ export const searchIcon = css`
   background: ${PaletteColor.secondary3};
   fill: ${PaletteColor.primary};
   cursor: pointer;
-  width: 24px;
+  width: 30px;
 `;

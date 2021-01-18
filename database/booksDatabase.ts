@@ -6,7 +6,6 @@ import { Book } from '../types';
 const writeFile = util.promisify(fs.writeFile);
 
 let _BOOKS: ReadonlyArray<Book> = [];
-let bookJsonMissing = false;
 const BOOK_JSON_PATH = path.join(process.cwd(), 'books.json');
 
 try {
@@ -16,7 +15,6 @@ try {
     })
   );
 } catch (e) {
-  bookJsonMissing = true;
   console.log('Error while reading books.json file');
 }
 
@@ -27,7 +25,6 @@ export async function updateBook(updatedBook: Book) {
   _BOOKS = _BOOKS.map((book) =>
     book.id === updatedBook.id ? updatedBook : book
   );
-  await writeToBookJson();
   return updatedBook;
 }
 
@@ -38,16 +35,10 @@ export async function addBook(newBook: Book) {
   };
   _BOOKS = [book, ..._BOOKS];
 
-  await writeToBookJson();
   return book;
 }
 
 export async function getBooks() {
-  if (!_BOOKS.length) {
-    if (bookJsonMissing) {
-      await writeFile(BOOK_JSON_PATH, JSON.stringify([], null, 2));
-    }
-  }
   return _BOOKS;
 }
 
