@@ -4,7 +4,7 @@ import { BookListItem } from '../bookListItem';
 import { bookListContainer, noBooksMsg } from './BookList.style';
 
 const searchBooksByTitle = (title: string, books: BooksState) =>
-  title ? books.filter(({ name }) => name.includes(title)) : books;
+  title ? books.filter(({ name }) => RegExp(title, 'ig').test(name)) : books;
 
 export function BookList() {
   const books = useSelector((state: BookLibraryState) => state.books);
